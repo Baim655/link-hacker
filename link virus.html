@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Selamat Ulang Tahun!</title>
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+    overflow: hidden;
+    color: #3a3a3a;
+  }
+  #app {
+    max-width: 350px;
+    height: 600px;
+    margin: 0 auto;
+    background:
+      radial-gradient(circle at top left, #ffb6c1 20%, transparent 60%),
+      radial-gradient(circle at bottom right, #bae1ff 25%, transparent 70%),
+      linear-gradient(135deg, #fff0f5, #e0f7ff);
+    border-radius: 20px;
+    box-shadow:
+      0 8px 24px rgba(0,0,0,0.15),
+      inset 0 -5px 10px #ffe6f0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+  #app::before {
+    content: "";
+    position: absolute;
+    top: 15%;
+    left: -30px;
+    width: 140px;
+    height: 140px;
+    background: rgba(255, 64, 129, 0.2);
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 0;
+  }
+  #app::after {
+    content: "";
+    position: absolute;
+    bottom: 10%;
+    right: -20px;
+    width: 180px;
+    height: 180px;
+    background: rgba(255, 182, 193, 0.25);
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+  }
+  .page {
+    flex: 1 0 100%;
+    padding: 30px 20px 40px 20px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .page.active {
+    display: flex;
+    animation: fadeIn 1.2s ease forwards;
+  }
+  h1 {
+    font-size: 2.4rem;
+    margin-bottom: 10px;
+    color: #ff4081;
+    text-shadow:
+      1px 1px 5px #ea4c89,
+      0 0 12px #ff6ea1;
+  }
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    color: #555;
+  }
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    line-height: 1.4;
+    max-width: 280px;
+    color: #777;
+  }
+  button {
+    background-color: #ff4081;
+    color: white;
+    font-weight: 700;
+    font-size: 1.25rem;
+    padding: 14px 40px;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 64, 129, 0.4);
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    user-select: none;
+  }
+  button:hover, button:focus {
+    outline: none;
+    background-color: #ff1f75;
+    box-shadow: 0 8px 25px rgba(255, 31, 117, 0.7);
+  }
+  button:active {
+    box-shadow: none;
+    background-color: #e60068;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  /* Page 2 fireworks style */
+  .fireworks {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .firework {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: screen;
+  }
+
+  /* confetti */
+  .confetti {
+    position: absolute;
+    width: 8px;
+    height: 14px;
+    opacity: 0.9;
+    border-radius: 2px;
+    animation: confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+    100% {opacity: 0; transform: translateY(600px) rotate(360deg);}
+  }
+  
+  /* Page 3 */
+  .quote {
+    font-style: italic;
+    font-size: 1.3rem;
+    color: #333;
+    max-width: 300px;
+    margin-bottom: 30px;
+  }
+  .heart {
+    color: #ff4081;
+    font-size: 2.6rem;
+    animation: beat 1.2s infinite ease-in-out;
+    user-select: none;
+  }
+  @keyframes beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* Mobile Responsiveness */
+  @media (max-width: 400px) {
+    #app {
+      margin: 10px auto;
+      border-radius: 15px;
+      height: 100vh;
+      max-width: 100vw;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="app" role="main" aria-live="polite">
+  <!-- Page 1: Welcome -->
+  <section id="page1" class="page active" aria-label="Welcome Page">
+    <h1>Hallo!</h1>
+    <h2>Hari Ini Spesial Untukmu</h2>
+    <p>Selamat ulang tahun! Semoga hari ini penuh dengan kebahagiaan.</p>
+    <button id="btnNext1" aria-controls="page2" aria-expanded="false">Mulai Ucapan</button>
+  </section>
+
+  <!-- Page 2: Birthday Wish -->
+  <section id="page2" class="page" aria-label="Birthday Wish Page">
+    <h1>Selamat Ulang Tahun Letoyy!</h1>
+    <p>Semoga tahun ini menjadi anak yang lebih hebat dari hari-hari sebelumnya. Semangat Letoyy!</p>
+    <button id="btnNext2" aria-controls="page3" aria-expanded="false">Lihat Pesan Spesial</button>
+    <canvas id="fireworks" class="fireworks" aria-hidden="true"></canvas>
+  </section>
+
+  <!-- Page 3: Final Message -->
+  <section id="page3" class="page" aria-label="Final Message Page">
+    <div class="quote">"Semoga sehat selalu,dilancarkan rezekinya,dan semoga tahun ini bisa menjadi tahun yang penuh dengan kebahagian,jangan lupa harus tetap bersyukur di dunia ini tidak ada yang kekal semuanya hanya sementara. Dan harus nurut sama orang tua,semoga semua cita citanya bisa tercapai,jangan pernah cape untuk menjalani proses nya harus tetap semangatt. Intinya semangatt buat Letoyy, harus jadi anak yang hebatt, kuatt dan ga letoyy,doa terbaik dh buat letoyy,SEMANGATTT.💪"</div>
+    <div class="heart" aria-hidden="true">🥳🥳🎉🎉</div>
+    <button id="btnRestart" aria-controls="page1" aria-expanded="false">Ulang dari Awal</button>
+  </section>
+</div>
+
+<script>
+  // Navigation handlers between pages
+  const pages = ["page1", "page2", "page3"];
+  let currentPageIndex = 0;
+
+  function showPage(index) {
+    pages.forEach((id, idx) => {
+      const el = document.getElementById(id);
+      if(idx === index) {
+        el.classList.add("active");
+        el.querySelector("button")?.setAttribute("aria-expanded", "true");
+        el.querySelector("button")?.focus();
+      } else {
+        el.classList.remove("active");
+        el.querySelector("button")?.setAttribute("aria-expanded", "false");
+      }
+    });
+    currentPageIndex = index;
+  }
+
+  document.getElementById("btnNext1").addEventListener("click", () => {
+    showPage(1);
+    startFireworks();
+  });
+
+  document.getElementById("btnNext2").addEventListener("click", () => {
+    stopFireworks();
+    showPage(2);
+  });
+
+  document.getElementById("btnRestart").addEventListener("click", () => {
+    showPage(0);
+  });
+
+  // Fireworks animation setup
+  const canvas = document.getElementById("fireworks");
+  const ctx = canvas.getContext("2d");
+  let cw, ch;
+  let fireworks = [];
+  let particles = [];
+  let animationFrameId;
+
+  function resizeCanvas() {
+    cw = canvas.width = canvas.clientWidth;
+    ch = canvas.height = canvas.clientHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  // Firework class
+  class Firework {
+    constructor(sx, sy, tx, ty) {
+      this.x = sx;
+      this.y = sy;
+      this.sx = sx;
+      this.sy = sy;
+      this.tx = tx;
+      this.ty = ty;
+      this.distanceToTarget = distance(sx, sy, tx, ty);
+      this.distanceTraveled = 0;
+      this.coordinates = [];
+      this.coordinateCount = 3;
+      while (this.coordinateCount--) {
+        this.coordinates.push([this.x, this.y]);
+      }
+      this.angle = Math.atan2(ty - sy, tx - sx);
+      this.speed = 3 + Math.random() * 2;
+      this.acceleration = 1.05;
+      this.brightness = random(50, 70);
+      this.targetRadius = 5;
+    }
+    update(index) {
+      this.coordinates.pop();
+      this.coordinates.unshift([this.x, this.y]);
+
+      this.speed *= this.acceleration;
+
+      let vx = Math.cos(this.angle) * this.speed;
+      let vy = Math.sin(this.angle) * this.speed;
+      this.distanceTraveled = distance(this.sx, this.sy, this.x + vx, this.y + vy);
+
+      if (this.distanceTraveled >= this.distanceToTarget) {
+        createParticles(this.tx, this.ty);
+        fireworks.splice(index, 1);
+      } else {
+        this.x += vx;
+        this.y += vy;
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+      ctx.lineTo(this.x, this.y);
+      ctx.strokeStyle = 'hsl(' + random(0, 360) + ', 100%, ' + this.brightness + '%)';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(this.tx, this.ty, this.targetRadius, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+
+  // Particle class
+  class Particle {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.coordinates = [];
+      this.coordinateCount = 5;
+      while (this.coordinateCount--) {
+        this.coordinates.push([this.x, this.y]);
+      }
+      this.angle = random(0, Math.PI * 2);
+      this.speed = random(1, 10);
+      this.friction = 0.95;
+      this.gravity = 0.7;
+      this.hue = random(0, 360);
+      this.brightness = random(50, 80);
+      this.alpha = 1;
+      this.decay = random(0.015, 0.03);
+    }
+    update(index) {
+      this.coordinates.pop();
+      this.coordinates.unshift([this.x, this.y]);
+      this.speed *= this.friction;
+      this.x += Math.cos(this.angle) * this.speed;
+      this.y += Math.sin(this.angle) * this.speed + this.gravity;
+      this.alpha -= this.decay;
+
+      if (this.alpha <= this.decay) {
+        particles.splice(index, 1);
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+      ctx.lineTo(this.x, this.y);
+      ctx.strokeStyle = 'hsla(' + this.hue + ', 100%, ' + this.brightness + '%, ' + this.alpha + ')';
+      ctx.stroke();
+    }
+  }
+
+  // Helpers
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+  function distance(aX, aY, bX, bY) {
+    return Math.sqrt((bX - aX) * (bX - aX) + (bY - aY) * (bY - aY));
+  }
+  function createParticles(x, y) {
+    let particleCount = 30;
+    while(particleCount--) {
+      particles.push(new Particle(x, y));
+    }
+  }
+
+  function loop() {
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.fillRect(0, 0, cw, ch);
+    ctx.globalCompositeOperation = 'lighter';
+
+    let i = fireworks.length;
+    while(i--) {
+      fireworks[i].draw();
+      fireworks[i].update(i);
+    }
+
+    let j = particles.length;
+    while(j--) {
+      particles[j].draw();
+      particles[j].update(j);
+    }
+
+    if(timerTick >= timerTotal) {
+      if(fireworks.length < maxFireworks) {
+        let startX = cw / 2;
+        let startY = ch;
+        let targetX = random(50, cw - 50);
+        let targetY = random(50, ch / 2);
+        fireworks.push(new Firework(startX, startY, targetX, targetY));
+        timerTick = 0;
+      }
+    } else {
+      timerTick++;
+    }
+
+    animationFrameId = requestAnimationFrame(loop);
+  }
+
+  let timerTick = 0;
+  const timerTotal = 40;
+  const maxFireworks = 5;
+
+  function startFireworks() {
+    if(!animationFrameId) {
+      ctx.clearRect(0, 0, cw, ch);
+      timerTick = 0;
+      fireworks = [];
+      particles = [];
+      animationFrameId = requestAnimationFrame(loop);
+    }
+  }
+  function stopFireworks() {
+    if(animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+      ctx.clearRect(0, 0, cw, ch);
+      fireworks = [];
+      particles = [];
+    }
+  }
+</script>
+</body>
+</html>
+
